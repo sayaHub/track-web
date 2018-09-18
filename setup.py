@@ -18,7 +18,7 @@ setuptools.setup(
         'Programming Language :: Python :: 3',
     ],
     install_requires=[
-        'flask==0.12',
+        'flask==0.12.4',
         'gunicorn==19.6.0',
         'pyyaml==3.12',
         'python-slugify==1.2.1',
@@ -27,7 +27,6 @@ setuptools.setup(
         'ujson==1.35',
         'flask-compress==1.4.0',
         'click==6.7',
-        'gevent==1.2.2',
         'Babel==2.6.0',
         'Flask-Caching==1.4.0',
     ],
