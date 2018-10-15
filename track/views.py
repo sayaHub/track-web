@@ -15,7 +15,11 @@ def register(app):
     # Redirects based on browser language, defaults to english
     @app.route("/")
     def index():
+
+        #import pdb; pdb.set_trace()
         user_lang = request.headers.get("Accept-Language", "en")
+        
+        
         if user_lang[:2] == "fr":
             return redirect("/fr/index/")
         else:
@@ -29,7 +33,10 @@ def register(app):
     @app.route("/fr/")
     @app.route("/en/index/")
     @app.route("/fr/index/")
+
     def splash_page():
+
+        #import pdb; pdb.set_trace()
         prefix = request.path[1:3]
         return render_template(generate_path(prefix, "index"))
 
@@ -56,6 +63,13 @@ def register(app):
     def help():
         prefix = request.path[1:3]
         return render_template(generate_path(prefix, "help"))
+
+    @app.route("/en/terms/")
+    @app.route("/fr/avis/")
+    def terms():
+        prefix = request.path[1:3]
+        return render_template(generate_path(prefix, "terms"))
+
 
     def generate_path(prefix, page_id):
         if prefix == "en" or prefix == "fr":
