@@ -170,11 +170,10 @@ class TestDomain():
 
     def test_to_csv_en(self, domain) -> None: # pylint: disable=no-self-use
         csv_string = models.Domain.to_csv([domain], 'https', 'en')
+        bytes_in = io.BytesIO(csv_string)
 
-        with io.StringIO() as sio:
-            sio.write(csv_string)
-            sio.seek(0)
-            reader = csv.DictReader(sio)
+        with io.TextIOWrapper(bytes_in, encoding='utf-8-sig', newline='') as wrapped_io:
+            reader = csv.DictReader(wrapped_io)
             assert sorted(reader.fieldnames) == [
                 '3DES',
                 'Approved Certificate',
@@ -224,10 +223,10 @@ class TestDomain():
 
     def test_to_csv_fr(self, domain) -> None: # pylint: disable=no-self-use
         csv_string = models.Domain.to_csv([domain], 'https', 'fr')
-        with io.StringIO() as sio:
-            sio.write(csv_string)
-            sio.seek(0)
-            reader = csv.DictReader(sio)
+        bytes_in = io.BytesIO(csv_string)
+
+        with io.TextIOWrapper(bytes_in, encoding='utf-8-sig', newline='') as wrapped_io:
+            reader = csv.DictReader(wrapped_io)
             assert sorted(reader.fieldnames) == [
                 '3DES',
                 'Absence de protocoles ou de suites de chiffrement ayant des vulnérabilités connues',
@@ -350,10 +349,4 @@ class TestOrganizations():
 class TestFlag():
 
     def test_get_cache_not_set(self, clean_model) -> None: # pylint: disable=no-self-use
-        assert not clean_model.Flag.get_cache()
-
-    def test_get_cache_set(self, clean_model) -> None: # pylint: disable=no-self-use
-        clean_model.Flag.set_cache(True)
-        assert clean_model.Flag.get_cache()
-        clean_model.Flag.set_cache(False)
-        assert not clean_model.Flag.get_cache()
+        assert clean_model.Flag.get_cache() == "1999-12-31 23:59"
