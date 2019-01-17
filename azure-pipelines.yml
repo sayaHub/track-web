@@ -50,7 +50,7 @@ jobs:
   steps:
       - task: ArchiveFiles@2
         inputs: 
-          rootFolderOrFile: '/opt/apps/track-web/'
+          rootFolderOrFile: '$(Build.BinariesDirectory)/opt/apps/track-web/'
           archiveType: 'tar'
           tarCompression: 'gz'
           archiveFile: '$(Build.ArtifactStagingDirectory)/track-web.tar.gz'
