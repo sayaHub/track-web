@@ -17,7 +17,7 @@ jobs:
       versionSpec: '3.5'
       architecture: 'x64'
 
-  - script: mkdir -p /opt/apps/track-web/
+  - script: mkdir -p $(agent.buildDirectory)/opt/apps/track-web/
             cd /opt/apps/track-web/
     displayName: 'Create app directory'
  
