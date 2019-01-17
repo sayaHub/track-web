@@ -1,0 +1,72 @@
+# Python package
+# Create and test a Python package on multiple Python versions.
+# Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/python
+
+trigger:
+- devops-dev
+
+jobs:
+- job: 'Job1'
+  pool:
+    vmImage: 'Ubuntu-16.04'
+  strategy:
+    matrix:
+      Python27:
+        python.version: '2.7'
+      Python35:
+        python.version: '3.5'
+      Python36:
+        python.version: '3.6'
+      Python37:
+        python.version: '3.7'
+    maxParallel: 4
+
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+      architecture: 'x64'
+
+  - script: mkdir /opt/apps/track-web/
+            cd /opt/apps/track-web/
+    displayName: 'Create app directory'
+ 
+  - script: python -m pip install --upgrade 
+    displayName: 'Install pip'
+
+  - script: python3 -m venv .env
+            . .env/bin/activate
+            pip install -r requirements.txt
+    displayName: 'Install dependencies'    
+
+  - script: |
+      pip install pytest
+      pytest --cov=track tests
+      pytest tests --doctest-modules --junitxml=junit/test-results.xml
+    displayName: 'pytest'
+
+
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFiles: '**/test-results.xml'
+      testRunTitle: 'Python $(python.version)'
+    condition: succeededOrFailed()
+
+- Job: 'Tar packpage'
+  dependsOn: 'Job1'
+  condition: succeeded('Job1') 
+
+  steps:
+      - task: ArchiveFiles@2
+        inputs: 
+          rootFolderOrFile: '/opt/apps/track-web/'
+          archiveType: 'tar'
+          tarCompression: 'gz'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/track-web.tar.gz'
+
+      - task: PublishPipelineArtifact@0
+        inputs:
+          artifactName: 'drop'
+          targetPath: $(Build.ArtifactStagingDirectory)   
+
