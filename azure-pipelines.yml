@@ -22,8 +22,8 @@ jobs:
             cd $(Build.BinariesDirectory)/opt/apps/track-web/
     displayName: 'Create app directory'
  
-  - script: python -m pip install --upgrade 
-    displayName: 'Install pip'
+ # - script: python -m pip install --upgrade 
+ #   displayName: 'Install pip'
 
   - script: |
             python3 -m venv .env
