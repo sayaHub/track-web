@@ -7,53 +7,16 @@ trigger:
 - devops-dev
 
 jobs:
-- job: 'Job1'
-  pool:
-    vmImage: 'Ubuntu-16.04'
-
-  steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '3.5'
-      architecture: 'x64'
-
-  - script: | 
-            mkdir -p $(Build.BinariesDirectory)/opt/apps/track-web/
-            cd $(Build.BinariesDirectory)/opt/apps/track-web/
-    displayName: 'Create app directory'
- 
- # - script: python -m pip install --upgrade 
- #   displayName: 'Install pip'
-
-  - script: |
-            python3 -m venv .env
-            . .env/bin/activate
-            pip install -r requirements.txt
-    displayName: 'Install dependencies'    
-
-  #- script: |
-  #    pip install pytest
-  #    pytest --cov=track tests
-  #    pytest tests --doctest-modules --junitxml=junit/test-results.xml
-  #  displayName: 'pytest'
-
-  #- task: PublishTestResults@2
-  #  inputs:
-  #    testResultsFiles: '**/test-results.xml'
-  #    testRunTitle: 'Python $(python.version)'
-  #  condition: succeededOrFailed()
-
 - job: 'Tar_packpage'
-  dependsOn: 'Job1'
-  condition: succeeded('Job1') 
+
 
   steps:
-      - task: ArchiveFiles@2
+      - task: CopyFiles@2
         inputs: 
-          rootFolderOrFile: '$(Build.BinariesDirectory)/opt/apps/track-web/'
-          archiveType: 'tar'
-          tarCompression: 'gz'
-          archiveFile: '$(Build.ArtifactStagingDirectory)/track-web.tar.gz'
+          sourceFolder: 'track/templates/en/'
+          contents: 'index.html'
+          targetFolder: '$(Build.ArtifactStagingDirectory)'
+          
 
       - task: PublishPipelineArtifact@0
         inputs:
