@@ -8,7 +8,7 @@ trigger:
 
 jobs:
 
-- job: 'Track-Web'
+- job: 'Track_Web'
   pool:
     vmImage: 'Ubuntu-16.04'
 
@@ -23,7 +23,7 @@ jobs:
 
 
 - job: 'Package'
-  dependsOn: 'Track-Web'
+  dependsOn: 'Track_Web'
   pool:
     vmImage: 'Ubuntu-16.04'
 
