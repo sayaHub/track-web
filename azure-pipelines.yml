@@ -58,7 +58,7 @@ jobs:
       includeRootFolder: false
       archiveType: 'tar'
       tarCompression: 'gz'
-      archiveFile: '$(Build.ArtifactStagingDirectory)/OfflinePackage/track-web.tar.gz' 
+      archiveFile: '$(Build.ArtifactStagingDirectory)/OfflinePackage/track_web.tar.gz' 
       replaceExistingArchive: true 
     displayName: 'Create OfflinePackage (tarball)'
 
