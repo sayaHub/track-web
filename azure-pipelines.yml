@@ -7,19 +7,63 @@ trigger:
 - devops-dev
 
 jobs:
-- job: 'Tar_packpage'
 
+- job: 'Track-Web'
+  pool:
+    vmImage: 'Ubuntu-16.04'
 
   steps:
-      - task: CopyFiles@2
-        inputs: 
-          sourceFolder: 'track/templates/en/'
-          contents: 'index.html'
-          targetFolder: '$(Build.ArtifactStagingDirectory)'
-          
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.5'
+      architecture: 'x64'
 
-      - task: PublishPipelineArtifact@0
-        inputs:
-          artifactName: 'drop'
-          targetPath: $(Build.ArtifactStagingDirectory)   
+  - script: python -m pip install --upgrade pip && pip install -r requirements.txt
+    displayName: 'Install dependencies'
 
+
+- job: 'Package'
+  dependsOn: 'Track-Web'
+  pool:
+    vmImage: 'Ubuntu-16.04'
+
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.5'
+      architecture: 'x64'
+
+  - script: python -m pip install --upgrade pip
+    displayName: 'Upgrade pip'
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)'
+      contents: |
+        track/**
+        tests/**
+        requirements.txt
+      targetFolder: '$(Build.ArtifactStagingDirectory)/Staging'
+      cleanTargetFolder: true
+      overWrite: true
+      flattenFolders: false
+    displayName: 'Copy App files'
+
+  - script: pip download -d $(Build.ArtifactStagingDirectory)/Staging/Dependencies -r requirements.txt
+    displayName: 'Download Dependencies for Offline Install'
+
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/Staging' 
+      includeRootFolder: false
+      archiveType: 'tar'
+      tarCompression: 'gz'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/OfflinePackage/track-web.tar.gz' 
+      replaceExistingArchive: true 
+    displayName: 'Create OfflinePackage (tarball)'
+
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: 'OfflinePackageWebTrack'
+      targetPath: '$(Build.ArtifactStagingDirectory)/OfflinePackage'
+    displayName: 'Upload OfflinePackage to Artifacts'
