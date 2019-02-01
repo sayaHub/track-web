@@ -41,7 +41,6 @@ jobs:
       sourceFolder: '$(Build.SourcesDirectory)'
       contents: |
         track/**
-        tests/**
         requirements.txt
       targetFolder: '$(Build.ArtifactStagingDirectory)/Staging'
       cleanTargetFolder: true
@@ -49,7 +48,7 @@ jobs:
       flattenFolders: false
     displayName: 'Copy App files'
 
-  - script: pip download -d $(Build.ArtifactStagingDirectory)/Staging/Dependencies -r requirements.txt
+  - script: pip download -d $(Build.ArtifactStagingDirectory)/Staging/Dependencies -r requirements.txt pip
     displayName: 'Download Dependencies for Offline Install'
 
   - task: ArchiveFiles@2
