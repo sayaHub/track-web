@@ -61,7 +61,13 @@ jobs:
       replaceExistingArchive: true 
     displayName: 'Create OfflinePackage (tarball)'
 
-  - task: PublishPipelineArtifact@0
+  #- task: PublishPipelineArtifact@0
+  #  inputs:
+  #    artifactName: 'OfflinePackageWebTrack'
+  #    targetPath: '$(Build.ArtifactStagingDirectory)/OfflinePackage'
+  #  displayName: 'Upload OfflinePackage to Artifacts'
+
+  - task: PublishBuildArtifacts@1
     inputs:
       artifactName: 'OfflinePackageWebTrack'
       targetPath: '$(Build.ArtifactStagingDirectory)/OfflinePackage'
