@@ -287,16 +287,16 @@ $(function () {
     // determines whether remote fetching has to happen
     var fetch = !(loneDomain(row));
 
-    return n(row.domain) + "<div class=\"mt-2\">" + l("", "#", showHideText(true, row), "onclick=\"return false\" data-fetch=\"" + fetch + "\" data-domain=\"" + row.domain + "\"") + "</div>";
+    return n(row.domain) + "<div class=\"mt-2\">" + l("", "#", showHideText(true, row), "data-fetch=\"" + fetch + "\" data-domain=\"" + row.domain + "\"") + "</div>";
   };
 
   var showHideText = function(show, row) {
     if (loneDomain(row))
-      return (show ? "<img src=\"/static/images/arrow.png\" aria-hidden=\"true\" class=\"rotated pb-1 mr-1 h-2\">" + text.show[language] : "<img src=\"/static/images/arrow.png\" class=\"mr-2 h-2\">" + text.hide[language]) + " " + text.details[language];
+      return (show ? "<img alt='' src=\"/static/images/arrow.png\" aria-hidden=\"true\" class=\"rotated pb-1 mr-1 h-2\">" + text.show[language] : "<img alt='' src=\"/static/images/arrow.png\" class=\"mr-2 h-2\">" + text.hide[language]) + " " + text.details[language];
     else if(row.totals.https.eligible == 1)
-      return (show ? "<img src=\"/static/images/arrow.png\" aria-hidden=\"true\" class=\"rotated pb-1 mr-1 h-2\">" + {en: "Show", fr: "Montrer le"}[language] : "<img src=\"/static/images/arrow.png\" class=\"mr-2 h-2\">" + {en: "Hide", fr: "Cacher le"}[language]) + " " + {en: "1", fr:""}[language] + text.subdomain[language];
+      return (show ? "<img alt='' src=\"/static/images/arrow.png\" aria-hidden=\"true\" class=\"rotated pb-1 mr-1 h-2\">" + {en: "Show", fr: "Montrer le"}[language] : "<img alt='' src=\"/static/images/arrow.png\" class=\"mr-2 h-2\">" + {en: "Hide", fr: "Cacher le"}[language]) + " " + {en: "1", fr:""}[language] + text.subdomain[language];
     else
-      return (show ? "<img src=\"/static/images/arrow.png\" aria-hidden=\"true\" class=\"rotated pb-1 mr-1 h-2\">" + text.show[language] : "<img src=\"/static/images/arrow.png\" class=\"mr-2 h-2\">" + text.hide[language]) + " " + row.totals.https.eligible + text.subdomains[language];
+      return (show ? "<img alt='' src=\"/static/images/arrow.png\" aria-hidden=\"true\" class=\"rotated pb-1 mr-1 h-2\">" + text.show[language] : "<img  alt=''src=\"/static/images/arrow.png\" class=\"mr-2 h-2\">" + text.hide[language]) + " " + row.totals.https.eligible + text.subdomains[language];
   };
 
   var initExpansions = function() {
@@ -321,7 +321,7 @@ $(function () {
 
         if (fetch) {
           console.log(text.fetch[language] + base_domain + "...");
-          link.addClass("loading").html("<img src=\"/static/images/arrow.png\" aria-hidden=\"true\" class=\"mr-2 h-2\">" + text.loading[language] + base_domain + " services...");
+          link.addClass("loading").html("<img alt='' src=\"/static/images/arrow.png\" aria-hidden=\"true\" class=\"mr-2 h-2\">" + text.loading[language] + base_domain + " services...");
 
           $.ajax({
             url: "/data/hosts/" + base_domain + "/https.json",
@@ -369,9 +369,7 @@ $(function () {
   };
 
   var l = function(base_domain, href, text, extra) {
-    // if base domain is provided, CSV download, so track with gtag
-    if(base_domain != "") return "<a onClick=\"gtag('event', 'download', { event_category: 'Download / Télécharger', event_action: 'Download / Télécharger CSV " + base_domain + "'});\" href=\"" + href + "\" target=\"blank\" " + extra + ">" + text + "</a>";
-    
+
     return "<a href=\"" + href + "\" target=\"blank\" " + extra + ">" + text + "</a>";
   };
 

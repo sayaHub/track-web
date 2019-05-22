@@ -8,6 +8,9 @@ var Tables = {
 
     // add common options to all renderTables requests
     if (!options.responsive) options.responsive = true;
+    
+    // Older browsers need this to load in an acceptable time frame. We may want to make it conditional in the future
+    if (!options.deferRender) options.deferRender = true;
 
     var customInit = function() {}; // noop
     if (options.initComplete) customInit = options.initComplete;
@@ -175,5 +178,6 @@ $(function() {
     $('#DataTables_Table_0_filter label').attr('class', 'w-full md:w-2/3');
     $('#datatables-search').attr('class', 'border border-solid border-https-dark-gray bg-https-light-gray focus:border-https-blue block md:inline-block h-8 md:ml-6 mb-4 md:mb-8 w-full md:w-3/5 lg:w-3/4');
     $('.dataTables_csv').attr('class', 'text-lg md:ml-4 mt-4 md:mt-6');
+
   });
 });
